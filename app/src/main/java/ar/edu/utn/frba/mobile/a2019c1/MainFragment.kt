@@ -6,10 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_main.*
-
-
-private const val ARG_TITLE = "title"
 
 /**
  * A simple [Fragment] subclass.
@@ -21,15 +20,8 @@ private const val ARG_TITLE = "title"
  *
  */
 class MainFragment : Fragment() {
-    private var title: String? = null
     private var listener: OnFragmentInteractionListener? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            title = it.getString(ARG_TITLE)
-        }
-    }
+    private lateinit var tweetsAdapter: TweetsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,14 +33,11 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        okButton.text = title
-        okButton.setOnClickListener {
-            onButtonPressed()
+        tweetsAdapter = TweetsAdapter(listener)
+        with(view as RecyclerView) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = tweetsAdapter
         }
-    }
-
-    fun onButtonPressed() {
-        listener?.showFragment(StatusUpdateFragment())
     }
 
     override fun onAttach(context: Context) {
@@ -89,11 +78,6 @@ class MainFragment : Fragment() {
          * @return A new instance of fragment MainFragment.
          */
         @JvmStatic
-        fun newInstance(title: String) =
-            MainFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_TITLE, title)
-                }
-            }
+        fun newInstance() = MainFragment()
     }
 }
