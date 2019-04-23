@@ -46,6 +46,7 @@ override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<Str
 ```
 * Agregar ```Permissions.checkForPermissions.......``` antes de mostrar el ImagesFragment
 * Agregar ```Permissions.checkForPermissions.......``` antes de lanzar el ImagePicker
+* Ambos llamados a checkForPermissions deben hacer referencia a ```android.manifest.permission.WRITE_EXTERNAL_STORAGE``` que es el código global de Android para el permiso
 
 ### Obtener la lista de imágenes editadas previamente por el usuario
 * Utilizar ```ExternalStorage.getFiles()``` para obtener la lista de imagenes editadas previamente
