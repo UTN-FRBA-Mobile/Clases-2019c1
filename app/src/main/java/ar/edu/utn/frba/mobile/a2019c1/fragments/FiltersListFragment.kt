@@ -20,7 +20,7 @@ import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.utils.ThumbnailItem
 import com.zomato.photofilters.utils.ThumbnailsManager
 import kotlinx.android.synthetic.main.fragment_filters_list.view.*
-import java.util.*
+import java.util.ArrayList
 
 class FiltersListFragment : Fragment(), ThumbnailsAdapter.ThumbnailsAdapterListener {
     private lateinit var mAdapter: ThumbnailsAdapter

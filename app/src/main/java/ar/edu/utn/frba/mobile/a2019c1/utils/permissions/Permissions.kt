@@ -29,7 +29,7 @@ object Permissions {
             }
             callback.onRequestSent()
         } else {
-            callback.onSuccess()
+            callback.onPermissionAlreadyGranted()
         }
     }
 
@@ -54,7 +54,7 @@ object Permissions {
     }
 
     interface Callback {
-        fun onSuccess()
+        fun onPermissionAlreadyGranted()
         fun onRequestSent()
     }
 }

@@ -17,6 +17,7 @@ import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
 import kotlinx.android.synthetic.main.fragment_edit_image.view.*
+import java.util.*
 
 const val IMAGE_PATH = "IMAGE_PATH"
 
@@ -145,6 +146,7 @@ class EditImageFragment : Fragment(), FiltersListFragment.FiltersListFragmentLis
     }
 
     fun save() {
+        ExternalStorage.saveFile(filteredImage, Calendar.getInstance().time.toString())
     }
 
     interface OnFragmentInteractionListener

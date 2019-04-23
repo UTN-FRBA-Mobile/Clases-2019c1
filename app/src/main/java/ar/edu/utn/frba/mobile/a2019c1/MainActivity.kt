@@ -2,6 +2,7 @@ package ar.edu.utn.frba.mobile.a2019c1
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,6 +11,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import ar.edu.utn.frba.mobile.a2019c1.fragments.EditImageFragment
 import ar.edu.utn.frba.mobile.a2019c1.fragments.ImagesFragment
+import ar.edu.utn.frba.mobile.a2019c1.utils.permissions.Permissions
 import ar.edu.utn.frba.mobile.a2019c1.utils.storage.preferences.MyPreferences
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -40,7 +42,15 @@ class MainActivity : AppCompatActivity(), ImagesFragment.ImagesFragmentInteracti
         initLayout()
 
         add.setOnClickListener {
-            launchImagePicker()
+            Permissions.checkForPermissions(this,  android.Manifest.permission.WRITE_EXTERNAL_STORAGE, "La aplicación necesita acceso a su galería para poder editar fotos y guardar las ediciones.", object : Permissions.Callback {
+                override fun onRequestSent() {
+                    launchImagePickerPending = true
+                }
+
+                override fun onPermissionAlreadyGranted() {
+                    launchImagePicker()
+                }
+            })
         }
     }
 
@@ -96,6 +106,27 @@ class MainActivity : AppCompatActivity(), ImagesFragment.ImagesFragmentInteracti
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            Permissions.REQUEST_WRITE_EXTERNAL_STORAGE -> {
+                if (grantResults.count() > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(launchImagePickerPending) {
+                        launchImagePicker()
+                    }
+                    if(showImagesListPending) {
+                        showImagesFragment()
+                    }
+                } else {
+                    launchImagePickerPending = false
+                    showImagesListPending = false
+                }
+                return
+            }
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == pickImageIntentValue && resultCode == Activity.RESULT_OK) {
             val imageUri = data?.data ?: return
@@ -115,7 +146,15 @@ class MainActivity : AppCompatActivity(), ImagesFragment.ImagesFragmentInteracti
     private fun initLayout() {
         initMenuActions()
         add.show()
-        showImagesFragment()
+        Permissions.checkForPermissions(this,  android.Manifest.permission.WRITE_EXTERNAL_STORAGE, "La aplicación necesita acceso a su galería para poder mostrar las fotos previamente editadas.", object : Permissions.Callback {
+            override fun onRequestSent() {
+                showImagesListPending = true
+            }
+
+            override fun onPermissionAlreadyGranted() {
+                showImagesFragment()
+            }
+        })
     }
 
     private fun initMenuActions() {

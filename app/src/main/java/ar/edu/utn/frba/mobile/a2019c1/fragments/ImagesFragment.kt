@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ar.edu.utn.frba.mobile.a2019c1.R
 import ar.edu.utn.frba.mobile.a2019c1.adapters.ImagesAdapter
+import ar.edu.utn.frba.mobile.a2019c1.utils.storage.fileSystem.ExternalStorage
 import kotlinx.android.synthetic.main.fragment_images.view.*
 
 const val SHOW_GRID: String = "SHOW_GRID"
@@ -76,7 +78,9 @@ class ImagesFragment : Fragment() {
     }
 
     private fun getEditedPictures(): List<Uri> {
-        return ArrayList()
+        val files = ExternalStorage.getFiles()
+
+        return files!!.map { file -> file.toUri() }
     }
 
     private fun configureRecyclerView(list: RecyclerView) {
