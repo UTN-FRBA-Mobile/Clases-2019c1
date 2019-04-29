@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), MainFragment.OnFragmentInteractionListener, StatusUpdateFragment.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(),
+    MainFragment.OnFragmentInteractionListener,
+    StatusUpdateFragment.OnFragmentInteractionListener,
+    TermsAndConditionsFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,5 +28,9 @@ class MainActivity : AppCompatActivity(), MainFragment.OnFragmentInteractionList
             .addToBackStack(null)
             .replace(R.id.fragmentContainer, fragment)
             .commit()
+    }
+
+    override fun goBack() {
+        supportFragmentManager.popBackStack()
     }
 }

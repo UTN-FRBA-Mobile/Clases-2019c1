@@ -7,4 +7,11 @@
     <string name="addToYourPost">Agregar a tu publicación</string>
     <string name="friends">Amigos</string>
     <string name="album">Álbum</string>
+
+    <string name="termsAndConditions">Términos y Condiciones</string>
+    <string name="acceptMenu">Aceptar</string>
+    <string name="dontAcceptMenu">No aceptar</string>
+    <string name="accept">Aceptaste los términos y condiciones. Grosso.</string>
+    <string name="dontAccept">Aceptá los terminos y condiciones, dale.</string>
+    <string name="photo_gallery">Galería</string>
 </resources>

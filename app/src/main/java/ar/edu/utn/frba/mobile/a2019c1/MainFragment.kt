@@ -3,6 +3,8 @@ package ar.edu.utn.frba.mobile.a2019c1
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -52,6 +54,7 @@ class MainFragment : Fragment() {
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
+        setHasOptionsMenu(true)
     }
 
     override fun onStart() {
@@ -71,6 +74,17 @@ class MainFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.add(R.string.termsAndConditions).apply {
+            setOnMenuItemClickListener {
+                listener?.showFragment(TermsAndConditionsFragment.newInstance())
+                true
+            }
+        }
+
     }
 
     /**
