@@ -1,11 +1,13 @@
 package ar.edu.utn.frba.mobile.a2019c1
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_footer.view.*
 import kotlinx.android.synthetic.main.item_header.view.*
 import kotlinx.android.synthetic.main.item_image.view.*
@@ -14,10 +16,12 @@ import kotlinx.android.synthetic.main.item_profile.view.*
 
 class TweetsAdapter(private val listener: MainFragment.OnFragmentInteractionListener?): RecyclerView.Adapter<TweetsAdapter.ViewHolder>() {
 
+    var tweets: List<Tweet> = listOf()
+
     override fun getItemViewType(position: Int): Int {
         return if (position == 0) R.layout.item_post
         else {
-            val hasPicture = position % 2 == 0 // hardcodeado, debería salir del item a mostrar
+            val hasPicture = tweets[position - 1].image != null // hardcodeado, debería salir del item a mostrar
             if (hasPicture) R.layout.item_image
             else R.layout.item_simple
         }
@@ -40,22 +44,27 @@ class TweetsAdapter(private val listener: MainFragment.OnFragmentInteractionList
         when (getItemViewType(position)) {
             R.layout.item_simple, R.layout.item_image -> {
                 val itemIndex = position - 1 // el primer item es el encabezado
+                val tweet = tweets[itemIndex]
                 // todo hardcodeado, debería salir del item
-                holder.itemView.nameText.text = "User ${itemIndex}"
-                holder.itemView.certifiedIcon.visibility = if (itemIndex % 3 == 0) View.VISIBLE else View.GONE
-                holder.itemView.usernameText.text = "@username${itemIndex}"
-                holder.itemView.tweetContent.text =
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua."
-                holder.itemView.commentCount.text = "${itemIndex}"
-                holder.itemView.retweetCount.text = "${itemIndex * 2}"
-                holder.itemView.likeCount.text = "${itemIndex * 3}"
+                holder.itemView.nameText.text = tweet.name
+                holder.itemView.certifiedIcon.visibility = if (tweet.certified) View.VISIBLE else View.GONE
+                holder.itemView.usernameText.text = tweet.username
+                holder.itemView.tweetContent.text = tweet.content
+                holder.itemView.commentCount.text = "${tweet.commentCount}"
+                holder.itemView.retweetCount.text = "${tweet.retweetCount}"
+                holder.itemView.likeCount.text = "${tweet.likeCount}"
+                Picasso.get().load(Uri.parse(tweet.profilePic))
+                    .into(holder.itemView.profilePic)
                 // solo si hay imagen usar holder.itemView.image
+                if (tweet.image != null)
+                    Picasso.get().load(Uri.parse(tweet.image))
+                        .into(holder.itemView.image)
             }
             else -> {}
         }
     }
 
-    override fun getItemCount(): Int = 100 + 1 // el primer item es el encabezado
+    override fun getItemCount(): Int = tweets.size + 1 // el primer item es el encabezado
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }

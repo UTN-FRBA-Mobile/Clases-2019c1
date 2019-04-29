@@ -5,10 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * A simple [Fragment] subclass.
@@ -22,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 class MainFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var tweetsAdapter: TweetsAdapter
+    private var api = Api.create()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +52,20 @@ class MainFragment : Fragment() {
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        api.getTweets()
+            .enqueue(object: Callback<TweetsResponse> {
+                override fun onResponse(call: Call<TweetsResponse>, response: Response<TweetsResponse>) {
+                    tweetsAdapter.tweets = response.body()!!.tweets
+                    tweetsAdapter.notifyDataSetChanged()
+                }
+                override fun onFailure(call: Call<TweetsResponse>, error: Throwable) {
+                    Toast.makeText(activity, "No tweets founds!", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     override fun onDetach() {
