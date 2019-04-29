@@ -12,5 +12,5 @@ package ar.edu.utn.frba.mobile.a2019c1
 
     fun fahToC(fah: Double):Double= ((fah - 32)/1.8)
 
-    fun fahToK(fah: Double):Double= ((fah - 32)*0.55+273.15)
+    fun fahToK(fah: Double):Double= ((fah - 32)/1.8+273.15)
 }
